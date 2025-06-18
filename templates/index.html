@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>WeasyPrint Server</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 0;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.5em;
+      font-weight: 300;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      opacity: 0.9;
+    }
+
+    h2 {
+      color: #333;
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+
+    .endpoint {
+      background: white;
+      border-radius: 8px;
+      padding: 25px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .endpoint h3 {
+      margin-top: 0;
+      color: #667eea;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .method {
+      background: #28a745;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+
+    .method.post {
+      background: #007bff;
+    }
+
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Consolas', 'Monaco', monospace;
+    }
+
+    pre {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      margin: 15px 0;
+      position: relative;
+    }
+
+    .copy-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.8em;
+    }
+
+    .copy-button:hover {
+      background: #764ba2;
+    }
+
+    .try-button {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 8px 16px;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+
+    .try-button:hover {
+      background: #764ba2;
+    }
+
+    .curl-example {
+      margin-top: 20px;
+    }
+
+    .json-example {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .response-example {
+      margin-top: 15px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 0.8em;
+      margin-left: 10px;
+    }
+
+    .status-ok {
+      background: #d4edda;
+      color: #155724;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1>WeasyPrint Server</h1>
+    <p class="subtitle">Convert HTML to PDF with a simple REST API</p>
+  </div>
+
+  <div class="container">
+    <h2>API Endpoints</h2>
+
+    <div class="endpoint">
+      <h3><span class="method post">POST</span> /generate</h3>
+      <p>Generate a PDF from HTML content and download it directly.</p>
+
+      <h4>Request Body:</h4>
+      <div class="json-example">
+        <pre>{
+  "html": "&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;p&gt;This is a test PDF&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;",
+  "options": {
+    "format": "A4",
+    "landscape": false,
+    "base_url": "https://example.com"
+  }
+}</pre>
+      </div>
+
+      <h4>cURL Example:</h4>
+      <div class="curl-example">
+        <pre id="curl-generate">curl -X POST <span class="host-placeholder">http://localhost:5000</span>/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "html": "&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;p&gt;Generated on '$(date)'&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;"
+  }' \
+  --output document.pdf</pre>
+        <button class="copy-button" onclick="copyToClipboard('curl-generate')">Copy</button>
+      </div>
+
+      <div class="response-example">
+        <strong>Response:</strong> Binary PDF file (Content-Type: application/pdf)
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <h3><span class="method post">POST</span> /generate-base64</h3>
+      <p>Generate a PDF and return it as a base64-encoded string (useful for JavaScript applications).</p>
+
+      <h4>Request Body:</h4>
+      <div class="json-example">
+        <pre>{
+  "html": "&lt;html&gt;&lt;body&gt;&lt;h1&gt;Base64 PDF&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;",
+  "options": {
+    "base_url": "https://example.com"
+  }
+}</pre>
+      </div>
+
+      <h4>cURL Example:</h4>
+      <div class="curl-example">
+        <pre id="curl-base64">curl -X POST <span class="host-placeholder">http://localhost:5000</span>/generate-base64 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "html": "&lt;html&gt;&lt;head&gt;&lt;style&gt;body { font-family: Arial; }&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Invoice #12345&lt;/h1&gt;&lt;p&gt;Total: $99.99&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;"
+  }' | jq</pre>
+        <button class="copy-button" onclick="copyToClipboard('curl-base64')">Copy</button>
+      </div>
+
+      <div class="response-example">
+        <strong>Response:</strong>
+        <pre>{
+  "pdf": "JVBERi0xLjQKJcfs...",
+  "size": 12345,
+  "hash": "d41d8cd98f00b204e9800998ecf8427e"
+}</pre>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <h3><span class="method">GET</span> /health</h3>
+      <p>Check server status and WeasyPrint availability.</p>
+
+      <h4>cURL Example:</h4>
+      <div class="curl-example">
+        <pre id="curl-health">curl <span class="host-placeholder">http://localhost:5000</span>/health</pre>
+        <button class="copy-button" onclick="copyToClipboard('curl-health')">Copy</button>
+      </div>
+
+      <div class="response-example">
+        <strong>Response:</strong>
+        <pre>{
+  "status": "ok",
+  "weasyprint_version": "65.1",
+  "timestamp": "2025-01-19T12:00:00.000Z"
+}</pre>
+      </div>
+
+      <a href="/health" class="try-button">Try it now</a>
+      <span class="status-badge status-ok">Live</span>
+    </div>
+
+    <div class="endpoint">
+      <h3><span class="method">GET</span> /example</h3>
+      <p>Generate a sample PDF to test the installation.</p>
+
+      <h4>cURL Example:</h4>
+      <div class="curl-example">
+        <pre
+          id="curl-example">curl <span class="host-placeholder">http://localhost:5000</span>/example --output example.pdf</pre>
+        <button class="copy-button" onclick="copyToClipboard('curl-example')">Copy</button>
+      </div>
+
+      <div class="response-example">
+        <strong>Response:</strong> Binary PDF file with example content
+      </div>
+
+      <a href="/example" class="try-button">Download Example PDF</a>
+    </div>
+
+    <h2>Advanced Examples</h2>
+
+    <div class="endpoint">
+      <h3>PDF with Custom Styling</h3>
+      <p>Generate a PDF with custom CSS and fonts:</p>
+
+      <div class="curl-example">
+        <pre id="curl-advanced">curl -X POST <span class="host-placeholder">http://localhost:5000</span>/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "html": "&lt;html&gt;&lt;head&gt;&lt;style&gt;@page { size: A4; margin: 2cm; } body { font-family: Georgia, serif; line-height: 1.6; } h1 { color: #2c3e50; border-bottom: 2px solid #3498db; } .highlight { background: #fffacd; padding: 10px; }&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Professional Report&lt;/h1&gt;&lt;p&gt;This document demonstrates advanced PDF generation.&lt;/p&gt;&lt;div class=\"highlight\"&gt;&lt;p&gt;Important: This section is highlighted.&lt;/p&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;",
+    "options": {
+      "format": "A4"
+    }
+  }' \
+  --output styled-document.pdf</pre>
+        <button class="copy-button" onclick="copyToClipboard('curl-advanced')">Copy</button>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <h3>JavaScript Integration Example</h3>
+      <p>How to use the API from a web application:</p>
+
+      <pre id="js-example">async function generatePDF() {
+  const response = await fetch('/generate-base64', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      html: document.getElementById('content').innerHTML
+    })
+  });
+
+  const data = await response.json();
+
+  // Create download link
+  const link = document.createElement('a');
+  link.href = 'data:application/pdf;base64,' + data.pdf;
+  link.download = 'document.pdf';
+  link.click();
+}</pre>
+      <button class="copy-button" onclick="copyToClipboard('js-example')">Copy</button>
+    </div>
+
+    <h2>Notes</h2>
+    <ul>
+      <li>Maximum request size: 16MB</li>
+      <li>Timeout: 120 seconds</li>
+      <li>Supported image formats: PNG, JPEG, SVG</li>
+      <li>CSS3 features are fully supported including flexbox and grid</li>
+    </ul>
+  </div>
+
+  <script>
+    // Replace localhost with actual host if accessed remotely
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      document.querySelectorAll('.host-placeholder').forEach(el => {
+        el.textContent = window.location.origin;
+      });
+    }
+
+    function copyToClipboard(elementId) {
+      const element = document.getElementById(elementId);
+      const text = element.textContent;
+
+      navigator.clipboard.writeText(text).then(() => {
+        const button = element.nextElementSibling;
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        setTimeout(() => {
+          button.textContent = originalText;
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy:', err);
+      });
+    }
+  </script>
+</body>
+
+</html>

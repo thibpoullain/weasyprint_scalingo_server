@@ -1,0 +1,15 @@
+# Web framework
+Flask==3.1.1
+gunicorn==23.0.0
+
+# WeasyPrint and dependencies
+WeasyPrint==65.1
+Pillow>=11.2.1
+cffi>=1.17.1
+cairocffi>=1.7.1
+
+# Monitoring
+psutil==7.0.0
+
+# Utilities
+python-dotenv==1.0.0

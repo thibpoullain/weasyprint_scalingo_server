@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 2.5cm;
+
+      @top-center {
+        content: "{{ title }}";
+        font-size: 10pt;
+        color: #666;
+      }
+
+      @bottom-center {
+        content: "Page " counter(page) " sur " counter(pages);
+        font-size: 10pt;
+        color: #666;
+      }
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      margin: -2.5cm -2.5cm 30px -2.5cm;
+      page-break-inside: avoid;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28pt;
+      font-weight: 300;
+    }
+
+    .date {
+      font-size: 12pt;
+      opacity: 0.9;
+      margin-top: 10px;
+    }
+
+    .content {
+      max-width: 100%;
+    }
+
+    .section {
+      margin: 30px 0;
+      page-break-inside: avoid;
+    }
+
+    .section h2 {
+      color: #667eea;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .feature {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .feature h3 {
+      margin-top: 0;
+      color: #495057;
+    }
+
+    .info-box {
+      background: #e7f3ff;
+      border: 1px solid #b3d9ff;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    table th {
+      background: #667eea;
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+
+    table td {
+      padding: 12px;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    table tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+
+    .footer {
+      margin-top: 50px;
+      text-align: center;
+      color: #6c757d;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1>{{ title }}</h1>
+    <div class="date">Généré le {{ date }}</div>
+  </div>
+
+  <div class="content">
+    <div class="section">
+      <h2>Introduction</h2>
+      <p>Ce document a été généré avec WeasyPrint sur Scalingo. WeasyPrint est une bibliothèque Python qui convertit
+        HTML et CSS en documents PDF de haute qualité.</p>
+
+      <div class="info-box">
+        <strong>Note :</strong> Ce PDF supporte les fonctionnalités CSS avancées comme les grilles, flexbox, et les
+        media queries pour l'impression.
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Fonctionnalités</h2>
+      <div class="feature-grid">
+        <div class="feature">
+          <h3>🎨 Support CSS3</h3>
+          <p>Support complet des sélecteurs CSS3, transformations, et mise en page moderne.</p>
+        </div>
+        <div class="feature">
+          <h3>📄 Pagination</h3>
+          <p>Gestion automatique des sauts de page avec en-têtes et pieds de page personnalisés.</p>
+        </div>
+        <div class="feature">
+          <h3>🖼️ Images</h3>
+          <p>Support des formats JPEG, PNG, SVG avec redimensionnement automatique.</p>
+        </div>
+        <div class="feature">
+          <h3>🔤 Polices</h3>
+          <p>Support des polices web et intégration de polices personnalisées.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Exemple de tableau</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Fonctionnalité</th>
+            <th>Status</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Génération PDF</td>
+            <td>✅ Actif</td>
+            <td>Conversion HTML vers PDF</td>
+          </tr>
+          <tr>
+            <td>API REST</td>
+            <td>✅ Actif</td>
+            <td>Endpoints REST pour la génération</td>
+          </tr>
+          <tr>
+            <td>Base64 Support</td>
+            <td>✅ Actif</td>
+            <td>Retour des PDF en base64</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer">
+      <p>Document généré automatiquement par WeasyPrint Server</p>
+    </div>
+  </div>
+</body>
+
+</html>
